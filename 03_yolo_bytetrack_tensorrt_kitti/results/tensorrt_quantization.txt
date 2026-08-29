@@ -1,0 +1,9 @@
+YOLO11n best.pt -> ONNX -> TensorRT (KITTI 独立验证集)
+
+           mAP50     引擎体积
+FP32       0.848     11 MB
+FP16       0.839      6 MB   (近乎无损)
+INT8       0.826      -
+
+检测(YOLO11n): mAP50 85.0% / mAP50-95 57.0%  (Car 95.1 / Ped 77.3 / Cyc 82.6 的 mAP50)
+检测器对比:   YOLO26n mAP50 0.833 (2.6M, ~0.5ms)  vs  RT-DETR-l mAP50 0.931 (32M, 4.5ms)

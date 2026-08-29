@@ -1,0 +1,4 @@
+path: D:/GuangFU/PV Detection-LNN/YOLO 检测 + ByteTrack 跟踪/kitti_data/yolo
+train: D:/GuangFU/PV Detection-LNN/YOLO 检测 + ByteTrack 跟踪/kitti_data/yolo/images/train
+val: D:/GuangFU/PV Detection-LNN/YOLO 检测 + ByteTrack 跟踪/kitti_data/yolo/images/val
+names: {0: Car, 1: Pedestrian, 2: Cyclist}

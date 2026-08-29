@@ -1,0 +1,39 @@
+# 数据与权重（不纳入版本管理）
+**/data/
+**/output/
+**/outputs/
+**/runs/
+**/logs/
+*.pth
+*.pt
+*.ckpt
+*.engine
+*.onnx
+*.ply
+*.npy
+*.bin
+*.zip
+*.tar
+*.tar.gz
+*.7z
+# 构建 / 缓存
+__pycache__/
+*.py[cod]
+*.so
+*.o
+build/
+*.egg-info/
+.venv/
+.ipynb_checkpoints/
+
+# Local datasets and generated caches
+/03_yolo_bytetrack_tensorrt_kitti/code/kitti_data/
+/03_yolo_bytetrack_tensorrt_kitti/code/data_tracking_image_2/
+*.cache
+
+**/kitti_data/
+**/data_tracking_image_2/
+*.cache
+
+**/kitti_data
+**/data_tracking_image_2
