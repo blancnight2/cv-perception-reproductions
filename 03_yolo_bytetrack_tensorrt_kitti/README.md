@@ -17,5 +17,13 @@
 端到端压测脚本已实现，并完成 1501 帧正式实测。
 - 脚本：[benchmark_yolo_bytetrack_e2e.py](D:\\GuangFU\\PV Detection-LNN\\tools\\benchmark_yolo_bytetrack_e2e.py)
 - 回归测试：[test_benchmark_yolo_bytetrack_e2e.py](D:\\GuangFU\\PV Detection-LNN\\tests\\test_benchmark_yolo_bytetrack_e2e.py)
-- 正式报告：[summary.json](D:\\GuangFU\\PV Detection-LNN\\runs\\detect\\benchmarks\\e2e_fp16_bytetrack_demo1\\summary.json)、[逐帧 CSV](D:\\GuangFU\\PV Detection-LNN\\runs\\detect\\benchmarks\\e2e_fp16_bytetrack_demo1\\per_frame_latency.csv)
+- 正式报告：summary.json：results\summary.json、逐帧 CSV:results\per_frame_latency.csv
 测试口径：排除 100 帧 warmup；每帧从视频解码开始，包含预处理、TensorRT 推理、NMS、ByteTrack 和绘制 ID/框；不含可选的视频编码写盘。
+
+指标	实测
+帧数	1501
+平均延迟	5.698 ms
+p50	5.707 ms
+p95	6.502 ms
+p99	7.165 ms
+稳态处理能力	175.50 FPS
