@@ -14,7 +14,7 @@
 详见 `results/`。权重 (*.pt/*.engine) 与数据集未纳入版本管理。
 <img width="604" height="400" alt="27581c4666f1fbea9731219f2e44b14c" src="https://github.com/user-attachments/assets/836165a2-8973-4084-8844-37f73d12faa5" />
 
-端到端压测脚本已实现，并完成 1501 帧正式实测。
+端到端压测，1501 帧正式实测。
 - 脚本：[benchmark_yolo_bytetrack_e2e.py](D:\\GuangFU\\PV Detection-LNN\\tools\\benchmark_yolo_bytetrack_e2e.py)
 - 回归测试：[test_benchmark_yolo_bytetrack_e2e.py](D:\\GuangFU\\PV Detection-LNN\\tests\\test_benchmark_yolo_bytetrack_e2e.py)
 - 正式报告：summary.json：results\summary.json、逐帧 CSV:results\per_frame_latency.csv
