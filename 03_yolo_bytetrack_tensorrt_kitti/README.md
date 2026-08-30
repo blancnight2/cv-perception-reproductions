@@ -20,10 +20,12 @@
 - 正式报告：summary.json：results\summary.json、逐帧 CSV:results\per_frame_latency.csv
 测试口径：排除 100 帧 warmup；每帧从视频解码开始，包含预处理、TensorRT 推理、NMS、ByteTrack 和绘制 ID/框；不含可选的视频编码写盘。
 
-指标	实测
-帧数	1501
-平均延迟	5.698 ms
-p50	5.707 ms
-p95	6.502 ms
-p99	7.165 ms
-稳态处理能力	175.50 FPS
+<img width="904" height="390" alt="image" src="https://github.com/user-attachments/assets/19bbe361-6f0f-4cb8-92f5-8fab2feb0542" />
+阶段均值：解码 0.806 ms，检测+NMS+ByteTrack 3.978 ms，绘制 0.901 ms。
+复跑命令：
+C:\Python313\python.exe tools\benchmark_yolo_bytetrack_e2e.py `
+  --output-dir "runs\detect\benchmarks\e2e_fp16_bytetrack_demo1"
+若要额外保存跟踪视频：
+C:\Python313\python.exe tools\benchmark_yolo_bytetrack_e2e.py --save
+--save 的视频编码耗时会单独记录在 CSV 的 write_ms_excluded，不会污染实时端到端 p50/p95。三项统计/预热回归测试均通过。
+
