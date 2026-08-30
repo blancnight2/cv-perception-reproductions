@@ -3,7 +3,7 @@
 ## 我做了什么
 - KITTI → YOLO 格式转换，规范 train/val 切分（5985 / 1496，**独立验证集**，非 train 当 val）。
 - 训练 **YOLO11n** 2D 检测；**ByteTrack** 在 KITTI Tracking 序列做多目标跟踪。
-- 部署优化：best.pt → ONNX → **TensorRT**，导出并对比 **FP32 / FP16 / INT8**。
+- 部署优化：best.pt → ONNX → **TensorRT**，导出并对比 **FP32 / FP16 / INT8**，engine profile , p50/p95/p99压测。
 - 附加：**YOLO26n vs RT-DETR-l**（CNN vs Transformer 检测器）精度 / 速度 / 体积权衡。
 
 ## 结果（KITTI 独立验证集）
@@ -14,7 +14,15 @@
 详见 `results/`。权重 (*.pt/*.engine) 与数据集未纳入版本管理。
 <img width="604" height="400" alt="27581c4666f1fbea9731219f2e44b14c" src="https://github.com/user-attachments/assets/836165a2-8973-4084-8844-37f73d12faa5" />
 
+Engine profile：
+
+<img width="871" height="480" alt="image" src="https://github.com/user-attachments/assets/b2cbf2a2-b2d3-412e-8085-697e3f837fdc" />
+
+
+用 TensorRT 11.2 对 FP16 ONNX 构建了静态 batch=1、640×640 的 engine，并以 trtexec 预热 500 次、压测 30 秒。纯 GPU engine 推理平均延迟 0.408 ms，p95 为 0.409 ms，吞吐 2448 qps。这个数字不包含视频解码、预处理、主机到显存传输、后处理/NMS、ByteTrack 和渲染，因此不能直接等同于端到端 FPS；端到端性能需要再单独压测。
+
 端到端压测，1501 帧正式实测
+
 - 脚本：code\benchmark_yolo_bytetrack_e2e.py
 - 回归测试：code\test_benchmark_yolo_bytetrack_e2e.py
 - 正式报告：summary.json：results\summary.json、逐帧 CSV:results\per_frame_latency.csv
