@@ -1,0 +1,56 @@
+{
+  "benchmark": "YOLO TensorRT + ByteTrack steady-state video pipeline",
+  "latency_definition": "VideoCapture.read through YOLO preprocessing, TensorRT inference, NMS, ByteTrack association, and Results.plot rendering; excludes optional video encoding.",
+  "model": "D:\\GuangFU\\PV Detection-LNN\\runs\\detect\\train\\weights\\best_fp16_trt112.engine",
+  "source": "D:\\GuangFU\\PV Detection-LNN\\runs\\detect\\data\\demo1.mp4",
+  "tracker": "bytetrack.yaml",
+  "input_size": 640,
+  "warmup_frames_excluded": 100,
+  "benchmarked_frames": 1501,
+  "save_video": false,
+  "output_video": null,
+  "end_to_end": {
+    "count": 1501,
+    "min_ms": 3.950099926441908,
+    "mean_ms": 5.698165890194853,
+    "p50_ms": 5.7070000329986215,
+    "p90_ms": 6.283800001256168,
+    "p95_ms": 6.5024999203160405,
+    "p99_ms": 7.165099959820509,
+    "max_ms": 15.45599999371916,
+    "fps_from_mean": 175.49506617923407
+  },
+  "decode": {
+    "count": 1501,
+    "min_ms": 0.7257999386638403,
+    "mean_ms": 0.8058175895217903,
+    "p50_ms": 0.7785999914631248,
+    "p90_ms": 0.8258000016212463,
+    "p95_ms": 0.8538999827578664,
+    "p99_ms": 0.9468999924138188,
+    "max_ms": 10.283899959176779,
+    "fps_from_mean": 1240.975641389817
+  },
+  "detect_nms_track": {
+    "count": 1501,
+    "min_ms": 2.772199921309948,
+    "mean_ms": 3.978221586810488,
+    "p50_ms": 3.9640000322833657,
+    "p90_ms": 4.417499992996454,
+    "p95_ms": 4.5532999793067575,
+    "p99_ms": 5.008300067856908,
+    "max_ms": 5.8660999638959765,
+    "fps_from_mean": 251.3686023210545
+  },
+  "render": {
+    "count": 1501,
+    "min_ms": 0.3939999733120203,
+    "mean_ms": 0.900642039315734,
+    "p50_ms": 0.8774000452831388,
+    "p90_ms": 1.2110000243410468,
+    "p95_ms": 1.319600036367774,
+    "p99_ms": 1.5844000736251473,
+    "max_ms": 2.1887999027967453,
+    "fps_from_mean": 1110.319035029448
+  }
+}
