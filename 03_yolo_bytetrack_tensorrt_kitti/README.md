@@ -14,7 +14,9 @@
 详见 `results/`。权重 (*.pt/*.engine) 与数据集未纳入版本管理。
 <img width="604" height="400" alt="27581c4666f1fbea9731219f2e44b14c" src="https://github.com/user-attachments/assets/836165a2-8973-4084-8844-37f73d12faa5" />
 
+
 针对KITTI数据集的优化
+
 
 ① 数据与协议:先把 KITTI 标签转成 YOLO 格式,筛选/映射到 Car / Pedestrian / Cyclist 三类;关键是我用了独立验证集(train/val = 5985/1496),不是拿训练集当验证——保证 mAP 真实、可复现。
 
@@ -25,9 +27,13 @@
 ④ 模型与部署:从 YOLO11n 基线(mAP50 85.0%) 换到 YOLO11s + 960 + rect,mAP50 提到 90.39% / mAP50-95 65.10%;再 ONNX→TensorRT 做 FP32/FP16/INT8 部署对比
 
 <img width="985" height="220" alt="image" src="https://github.com/user-attachments/assets/c5993c77-ece6-4e13-9c52-075642183e9e" />
+
 ① 基线 YOLO11n@640 是 85.0;
+
 ② 模型不变,只把输入改成 960+矩形训练 → 88.8,mAP50-95 从 57 涨到 63 —— 这是最大的单一提升,因为 KITTI 宽幅、远处目标小,高分辨率对小目标和定位帮助最大(所以严格的 mAP50-95 涨得更多);
+
 ③ 在此基础上只把 n 换成 s → 90.4,模型容量再加约 1.6 个点,是次要贡献;
+
 ④ 我还试过更强的 scale 增强 + 提高 cls 权重,结果掉到 87.3,说明过强增强不划算,就没采用。
 所以主力是输入端调优,模型升级是锦上添花
 
