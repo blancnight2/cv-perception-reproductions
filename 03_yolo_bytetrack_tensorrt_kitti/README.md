@@ -14,7 +14,15 @@
 详见 `results/`。权重 (*.pt/*.engine) 与数据集未纳入版本管理。
 <img width="604" height="400" alt="27581c4666f1fbea9731219f2e44b14c" src="https://github.com/user-attachments/assets/836165a2-8973-4084-8844-37f73d12faa5" />
 
-针对KITTI数据集优化后
+针对KITTI数据集的优化
+
+① 数据与协议:先把 KITTI 标签转成 YOLO 格式,筛选/映射到 Car / Pedestrian / Cyclist 三类;关键是我用了独立验证集(train/val = 5985/1496),不是拿训练集当验证——保证 mAP 真实、可复现。
+
+② 输入尺寸 + 矩形训练:KITTI 图像是宽幅(约 1242×375,接近 3.3:1),用方形 640 会 padding 掉大量像素、还压缩了远处小目标。所以我开 rect=True 矩形训练、把 imgsz 加到 960,保住远处行人/骑行者的细节。
+
+③ 场景相关的数据增强:驾驶场景重力方向固定,不能上下翻,所以 flipud=0;左右翻合理保留。避免破坏几何结构的增强。
+
+④ 模型与部署:从 YOLO11n 基线(mAP50 85.0%) 换到 YOLO11s + 960 + rect,mAP50 提到 90.39% / mAP50-95 65.10%;再 ONNX→TensorRT 做 FP32/FP16/INT8 部署对比
 
 训练调优口径是 7481 张 KITTI 训练集按 8:2 划分，独立验证集 1496 张。e3 YOLO11s 在 960、rect、batch 8 的组合下，第 46 轮达到 mAP50 90.39%、mAP50-95 65.10%、Precision 89.55%、Recall 82.66%。
 部署口径单独说明：静态 640 FP16 TRT 11.2 engine 的纯 engine mean/p95 为 0.408/0.409 ms；demo1.mp4 1501 帧、排除 100 帧预热、含解码到绘制的端到端 p50/p95 为 5.707/6.502 ms，平均处理能力 175.50 FPS。
