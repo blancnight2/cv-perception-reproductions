@@ -7,12 +7,17 @@
 - 附加：**YOLO26n vs RT-DETR-l**（CNN vs Transformer 检测器）精度 / 速度 / 体积权衡。
 
 ## 结果（KITTI 独立验证集）
-- 检测 YOLO11n：**mAP50 85.0% / mAP50-95 57.0%**（Car 95.1 / Ped 77.3 / Cyc 82.6 的 mAP50）。
+- 检测 YOLO11n：**mAP50 83.9% / mAP50-95 57.1%**（Car 95.1 / Ped 77.3 / Cyc 82.6 的 mAP50）。
 - TensorRT：**FP16 mAP50 0.839（≈FP32 0.848，近无损），引擎 11→6MB**；INT8 0.826。
 - YOLO26n 0.833（2.6M, ~0.5ms） vs RT-DETR-l 0.931（32M, 4.5ms）。
 
 详见 `results/`。权重 (*.pt/*.engine) 与数据集未纳入版本管理。
 <img width="604" height="400" alt="27581c4666f1fbea9731219f2e44b14c" src="https://github.com/user-attachments/assets/836165a2-8973-4084-8844-37f73d12faa5" />
+
+针对KITTI数据集优化后
+
+训练调优口径是 7481 张 KITTI 训练集按 8:2 划分，独立验证集 1496 张。e3 YOLO11s 在 960、rect、batch 8 的组合下，第 46 轮达到 mAP50 90.39%、mAP50-95 65.10%、Precision 89.55%、Recall 82.66%。
+部署口径单独说明：静态 640 FP16 TRT 11.2 engine 的纯 engine mean/p95 为 0.408/0.409 ms；demo1.mp4 1501 帧、排除 100 帧预热、含解码到绘制的端到端 p50/p95 为 5.707/6.502 ms，平均处理能力 175.50 FPS。
 
 Engine profile：
 
