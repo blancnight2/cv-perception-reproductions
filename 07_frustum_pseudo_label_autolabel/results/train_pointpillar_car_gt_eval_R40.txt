@@ -1,0 +1,21 @@
+Car AP_R40@0.70, 0.70, 0.70:
+bbox AP:95.3853, 91.8597, 90.5208
+bev  AP:92.1426, 87.9969, 86.6498
+3d   AP:87.8038, 77.6981, 73.5640
+aos  AP:95.37, 91.55, 90.06
+Car AP@0.70, 0.50, 0.50:
+bbox AP:90.6702, 89.3192, 88.1237
+bev  AP:90.7422, 89.8918, 89.1839
+3d   AP:90.7422, 89.7911, 88.9575
+aos  AP:90.66, 89.03, 87.71
+Car AP_R40@0.70, 0.50, 0.50:
+bbox AP:95.3853, 91.8597, 90.5208
+bev  AP:95.5769, 94.5603, 93.7703
+3d   AP:95.5485, 94.2062, 93.0205
+aos  AP:95.37, 91.55, 90.06
+
+2026-09-03 20:36:42,260   INFO  Result is saved to /home/blancnight/OpenPCDet/output/kitti_models/pointpillar_car_gt/v1/eval/eval_with_train/epoch_80/val
+2026-09-03 20:36:42,260   INFO  ****************Evaluation done.*****************
+2026-09-03 20:36:42,280   INFO  Epoch 80 has been evaluated
+Wait 30 seconds for next check (progress: 0.0 / 0 minutes): /home/blancnight/OpenPCDet/output/kitti_models/pointpillar_car_gt/v1/ckpt 2026-09-03 20:37:13,487   INFO  **********************End evaluation kitti_models/pointpillar_car_gt(v1)**********************
+===== pointpillar_car_gt 结束: Thu Sep  3 20:37:18 CST 2026 退出码 0 =====
