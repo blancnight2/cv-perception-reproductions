@@ -1,0 +1,20 @@
+Car AP_R40@0.70, 0.70, 0.70:
+bbox AP:59.8626, 37.2593, 32.5993
+bev  AP:44.5429, 45.3853, 37.8592
+3d   AP:15.1249, 12.6994, 10.8135
+aos  AP:27.16, 17.01, 15.12
+Car AP@0.70, 0.50, 0.50:
+bbox AP:58.1194, 39.7440, 35.7167
+bev  AP:67.1000, 62.1808, 54.0647
+3d   AP:62.9957, 49.4244, 42.7884
+aos  AP:27.29, 17.01, 15.45
+Car AP_R40@0.70, 0.50, 0.50:
+bbox AP:59.8626, 37.2593, 32.5993
+bev  AP:67.0377, 62.9652, 54.1212
+3d   AP:63.9583, 48.4813, 41.1809
+aos  AP:27.16, 17.01, 15.12
+
+2026-09-04 01:30:00,416   INFO  Result is saved to /home/blancnight/OpenPCDet/output/kitti_models/pointpillar_car_pseudo_yoloe/v1/eval/eval_with_train/epoch_80/val
+2026-09-04 01:30:00,416   INFO  ****************Evaluation done.*****************
+2026-09-04 01:30:00,433   INFO  Epoch 80 has been evaluated
+2026-09-04 01:30:30,438   INFO  **********************End evaluation kitti_models/pointpillar_car_pseudo_yoloe(v1)**********************
