@@ -9,7 +9,7 @@
 |---|---|---|---|---|
 | 01 | PointPillars (OpenPCDet) | 点云 3D 目标检测 | KITTI | 3D AP R40/Mod：Car 75.6 / Ped 43.7 / Cyc 62.1；**pillar 0.08 改进后 76.9 / 49.0 / 63.5** |
 | 02 | 3D Gaussian Splatting | 场景重建·新视角合成 | Tanks&Temples (Truck) | PSNR 25.4 / SSIM 0.88 / LPIPS 0.14（≈/>原论文） |
-| 03 | YOLO + ByteTrack + TensorRT | 2D 检测·跟踪·部署量化 | KITTI | **mAP50 90.4% / mAP50-95 65.1%**（YOLO11s@960+rect）；跟踪 Car MOTA **71.9%** / IDF1 **82.7%**；TensorRT FP16 端到端 **175.5 FPS** |
+| 03 | YOLO + ByteTrack + TensorRT | 2D 检测·跟踪·部署量化 | KITTI | **mAP50 90.4% / mAP50-95 65.1%**（YOLO11s@960+rect）；跟踪 Car **HOTA 76.1** / MOTA 83.8（TrackEval 官方）；TensorRT FP16 端到端 **175.5 FPS** |
 | 04 | PointNet++ | 点云语义分割 | S3DIS | mIoU 60.3% / OA 87.1% |
 | 05 | Lift-Splat-Shoot 深度监督消融 | BEV 多相机感知·深度估计 | nuScenes | **16 线即达 32 线 95% 的深度精度**；权重校准后分割差异落入种子噪声 |
 | 06 | YOLOE / Qwen3-VL 开放词汇 | 零样本检测·自动标注 | KITTI | YOLOE mAP50 **0.4414** vs Qwen3-VL-8B **0.2542**（同协议、同 1496 张验证集） |
