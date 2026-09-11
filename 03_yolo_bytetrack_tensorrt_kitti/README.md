@@ -69,3 +69,86 @@ C:\Python313\python.exe tools\benchmark_yolo_bytetrack_e2e.py --save--save
 
 ---
 
+
+---
+
+## 多目标跟踪评测（KITTI Tracking，21 段训练序列）
+
+此前这个项目只有「ByteTrack 已跑通」，**没有任何跟踪指标**——而 ByteTrack 的全部价值就在
+ID 一致性，不测等于没做。这里补上完整评测。
+
+**协议**（对齐 KITTI 官方跟踪 benchmark 的关键几条）：
+
+- 逐类评测，匹配 IoU 阈值 0.5；21 段 training 序列（testing 无公开真值）
+- `Van` 对 Car、`Person_sitting` 对 Pedestrian、`DontCare` 一律记为 **ignore**
+- **难度过滤**：框高 < 25 px、遮挡等级 > 2、截断 > 0.5 的真值降级为 ignore
+- ignore 区域的压制用 **IoA（检测框被覆盖的比例）而非 IoU**——KITTI 的 `DontCare`
+  常是覆盖一片远处目标的大框，小检测框落在里面 IoU 很低，用 IoU 压不住
+
+### 结果（YOLO11n + ByteTrack，conf 0.25，imgsz 640）
+
+| 类别 | MOTA | MOTP(IoU) | IDF1 | IDSW | MT | ML |
+|---|---|---|---|---|---|---|
+| Car | **68.58%** | 0.849 | **81.28%** | 214 | 367 | 28 |
+| Pedestrian | 40.32% | 0.747 | 48.68% | 456 | 36 | 41 |
+| Cyclist | 26.66% | 0.750 | 49.89% | 27 | 10 | 8 |
+
+### 误差归因：跟踪不是瓶颈，检测召回才是
+
+| 类别 | 真值数 | 漏检 FN | 误检 FP | **ID 切换** |
+|---|---|---|---|---|
+| Car | 19551 | 18.9% | 11.4% | **1.1%** |
+| Pedestrian | 11070 | **42.6%** | 13.0% | **4.1%** |
+| Cyclist | 1819 | **49.9%** | 22.0% | **1.5%** |
+
+> **ID 切换在三类里都只占 1–4%，而漏检占 19–50%。**
+> 也就是说 **ByteTrack 本身工作正常，MOTA 低几乎全部来自检测器没看见目标**——
+> 近一半的行人和骑行者从未被检出。
+> **结论：继续调跟踪器（缓冲帧数、匹配阈值）收益极小，该投入的是检测召回**
+> ——更高输入分辨率、更强主干、或针对小目标的训练策略。
+> 这与本项目另一处发现互相印证：960 + 矩形训练把 mAP50 从 85.0 拉到 88.8，
+> 正是因为 KITTI 宽幅图像下远处小目标吃亏。
+
+### 一个额外的归因实验
+
+怀疑「把骑车人误判成行人」是行人 FP 的主因，于是加了一档
+`--neutral-person`（Cyclist ↔ Pedestrian 互记 ignore）单独量化：
+
+| 类别 | 官方口径 | 人/骑车人互记 ignore | 差 |
+|---|---|---|---|
+| Pedestrian | 40.32% | 40.50% | +0.18 |
+| Cyclist | 26.66% | 27.10% | +0.44 |
+
+> **假设被否掉**：类别混淆只值 0.2–0.4 个 MOTA 点。
+> 在 3 段子集上看曾经很像主因（行人预测里 53 个压在 Cyclist 真值上、只有 36 个压在行人上），
+> 但全量 21 段推翻了它——**那个子集里 Cyclist 是 Pedestrian 的 7 倍，严重不具代表性**。
+> 教训：小子集上的归因结论必须回到全量验证。
+
+### 评测过程中发现并修掉的四个坑
+
+1. **`persist=False` 导致跟踪器每帧重建**。ultralytics 把图片文件夹当成一堆互相独立的图，
+   ID 每帧从 1 重排，于是每个目标每帧都被记一次 ID 切换——
+   **IDSW 虚高到 9484、Car MOTA 虚低到 35.97%**。改 `persist=True` 后 IDSW 降到 214。
+   代价是跨序列必须手动 `trackers[i].reset()`，否则上一段的 ID 会串到下一段。
+2. **难度过滤缺失**：不过滤小目标/重遮挡，FN 与 FP 同时虚高。
+3. **ignore 压制误用 IoU**：改成 IoA 后，Car 的 FP 从 88 降到 37（3 段子集上）。
+4. **`motmetrics` 的 `motp` 在 `generate_overall` 下返回 nan**：改为直接从事件表里
+   取 `Type=='MATCH'` 的距离均值，自己换算回 IoU。
+
+### ⚠️ 一个必须说明的局限
+
+**KITTI 的目标检测数据集与跟踪数据集来自同一批原始采集序列。**
+本项目的检测器是在 KITTI 检测划分上训练的，因此**很可能见过这些跟踪序列中的部分帧**，
+上面的数字应视为**乐观估计**。要得到无污染的结论，需按原始采集片段（drive）重新划分
+训练/评测，或直接在 KITTI tracking 的 test 集上提交官方评测。
+
+### 复现
+
+```bash
+python code/eval_track.py                      # 官方口径，21 段
+python code/eval_track.py --neutral-person     # 归因口径
+python code/eval_track.py --seqs 0000,0003     # 只跑几段
+```
+
+需 KITTI tracking 真值 `data_tracking_label_2`（官网单独下载），
+解压后把 `label_02/` 放到 `data_tracking_image_2/` 下。
