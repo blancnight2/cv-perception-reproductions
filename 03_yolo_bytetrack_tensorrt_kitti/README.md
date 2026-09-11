@@ -66,3 +66,6 @@ C:\Python313\python.exe tools\benchmark_yolo_bytetrack_e2e.py --save--save
 
 视频编码耗时会单独记录在 CSV 的 write_ms_excluded，不会污染实时端到端 p50/p95。三项统计/预热回归测试均通过。
 
+
+---
+
